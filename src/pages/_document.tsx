@@ -1,8 +1,9 @@
-import Document, { Head, Main, NextScript, Html } from "next/document";
-import React from "react";
+import Document, { Head, Main, NextScript, Html } from 'next/document';
+import React, { ReactElement } from 'react';
 
 class MyDocument extends Document<any> {
-  render() {
+
+  render(): ReactElement {
     return (
       <Html lang="en">
         <Head>
@@ -50,6 +51,7 @@ class MyDocument extends Document<any> {
       </Html>
     );
   }
+
 }
 
 export default MyDocument;

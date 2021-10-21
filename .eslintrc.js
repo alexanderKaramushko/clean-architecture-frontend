@@ -43,6 +43,7 @@ const config = {
         'components',
         'domain',
         'pages',
+        'theme',
         'utils',
       ]
     }],
@@ -81,7 +82,8 @@ const config = {
         minProperties: 3
       },
     }],
-    'react-hooks/exhaustive-deps': 'off'
+    'react-hooks/exhaustive-deps': 'off',
+    "react/jsx-props-no-spreading": 'off',
   },
   settings: {
     'import/extensions': ['.ts', '.tsx', '.json'],

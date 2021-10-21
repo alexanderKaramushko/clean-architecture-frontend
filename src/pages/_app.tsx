@@ -1,12 +1,18 @@
-import Head from "next/head";
-import React from "react";
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { ReactElement } from 'react';
+import Head from 'next/head';
 
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core/styles';
 import theme from 'theme';
 
 import 'assets/styles/global.scss';
+import { CssBaseline } from '@mui/material';
 
-const _App = ({ Component, pageProps }: any) => (
+import StoreProvider from 'adapters/store/StoreProvider';
+import { store } from 'adapters/store';
+
+const _App = ({ Component, pageProps }: any): ReactElement => (
   <>
     <Head>
       <meta
@@ -15,9 +21,12 @@ const _App = ({ Component, pageProps }: any) => (
       />
       <title>Onepiece</title>
     </Head>
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <StoreProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </StoreProvider>
   </>
 );
 

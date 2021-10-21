@@ -1,3 +1,1 @@
-// Describe applicative layer for so called `use cases`
-
-export {};
+export { addPanelActionCase, removePanelActionCase } from './PanelActions';

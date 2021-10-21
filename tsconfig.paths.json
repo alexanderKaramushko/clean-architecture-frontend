@@ -8,6 +8,7 @@
       "components/*": ["components/*"],
       "domain/*": ["domain/*"],
       "pages/*": ["pages/*"],
+      "theme/*": ["theme/*"],
       "utils/*": ["utils/*"]
     },
   }

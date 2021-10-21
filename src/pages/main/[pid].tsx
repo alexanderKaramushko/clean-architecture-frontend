@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import React, { FC } from 'react';
 
 const Main: FC<any> = (props) => {
@@ -17,12 +17,12 @@ const Main: FC<any> = (props) => {
       />
     </div>
   );
-}
+};
 
 export async function getStaticPaths() {
   return {
+    fallback: true,
     paths: [],
-    fallback: true
   };
 }
 
@@ -31,20 +31,20 @@ export async function getStaticProps({ params }: any) {
 
   try {
     const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${pid}`);
-    const post = await response.json()
+    const post = await response.json();
 
     return {
       props: {
-        post,
         pid,
+        post,
       },
       revalidate: 1,
     };
   } catch (error) {
     return {
       props: {
-        post: {},
         pid,
+        post: {},
       },
       revalidate: 1,
     };
