@@ -6,24 +6,29 @@ import React, { FC,
   KeyboardEvent, MouseEvent } from 'react';
 import curry from 'lodash/fp/curry';
 import identity from 'lodash/fp/identity';
+import map from 'lodash/fp/map';
 
 import MenuIcon from '@mui/icons-material/Menu';
-import Attachment from '@mui/icons-material/Attachment';
-import { List,
-  ListItem,
-  Drawer,
-  IconButton,
-  ListItemButton,
-  ListItemSecondaryAction,
-  Toolbar,
-  AppBar as MaterialAppBar } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import { Button } from 'components/atoms';
+import Attachment from '@mui/icons-material/Attachment';
+import { Drawer,
+  IconButton,
+  Toolbar,
+  Grid,
+  Typography,
+  AppBar as MaterialAppBar } from '@mui/material';
+import { TreeView, TreeItem } from '@material-ui/lab';
+
 import { PanelAction } from 'application/PanelActions/ports';
+import { LinkGroup, Link } from 'domain/index';
 import { AppBarProps } from './types';
 
+// todo move <Drawer /> to root
+// todo move recursive tree view to separate component
 const AppBar: FC<AppBarProps> = (props): ReactElement => {
-  const { addPanelAction = identity, children } = props;
+  const { addPanelAction = identity, children, linkGroups } = props;
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = curry((isOpen: boolean, _: KeyboardEvent | MouseEvent) => {
@@ -31,12 +36,66 @@ const AppBar: FC<AppBarProps> = (props): ReactElement => {
   });
 
   const attachAction = curry(
-    (panelAction: PanelAction, event: MouseEvent<HTMLDivElement>) => addPanelAction(panelAction),
+    (panelAction: PanelAction, event: MouseEvent<HTMLButtonElement>) => addPanelAction(panelAction),
   );
+
+  function renderLinks(links: Link[]): ReactElement[] {
+    return links.map(({ title, nested }) => (
+      <TreeItem
+        nodeId={title}
+        key={title}
+        label={(
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            sx={{
+              px: 2,
+            }}
+          >
+            <Grid item xs="auto">
+              <Typography>{title}</Typography>
+            </Grid>
+            <Grid item xs="auto">
+              <IconButton
+                onClick={attachAction({ Component: title })}
+                edge="end"
+                aria-label="delete"
+              >
+                <Attachment />
+              </IconButton>
+            </Grid>
+          </Grid>
+        )}
+      >
+        {nested ? renderLinks(nested) : null}
+      </TreeItem>
+    ));
+  }
+
+  function renderLinkGroup({ title, links }: LinkGroup): ReactElement {
+    return (
+      <TreeItem
+        nodeId={title}
+        key={title}
+        label={<Typography variant="h3">{title}</Typography>}
+      >
+        {renderLinks(links)}
+      </TreeItem>
+    );
+  }
+
+  const renderLinkGroups = map(renderLinkGroup);
 
   return (
     <>
-      <MaterialAppBar position="fixed">
+      <MaterialAppBar
+        position="fixed"
+        color="transparent"
+        sx={{
+          boxShadow: 'none',
+        }}
+      >
         <Toolbar>
           <IconButton onClick={toggleDrawer(!open)}>
             <MenuIcon />
@@ -47,46 +106,19 @@ const AppBar: FC<AppBarProps> = (props): ReactElement => {
       <Drawer
         anchor="left"
         onClose={toggleDrawer(false)}
+        SlideProps={{
+          style: {
+            padding: '42px 24px',
+          },
+        }}
         open={open}
       >
-        <List>
-          <ListItem>
-            <ListItemButton
-              color="primary"
-              variant="contained"
-              component={Button}
-            >
-              Раздел 1
-            </ListItemButton>
-            <ListItemSecondaryAction>
-              <IconButton
-                onClick={attachAction({ Component: <div>Действие Раздела 1</div> })}
-                edge="end"
-                aria-label="delete"
-              >
-                <Attachment />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem>
-            <ListItemButton
-              color="primary"
-              variant="contained"
-              component={Button}
-            >
-              Раздел 2
-            </ListItemButton>
-            <ListItemSecondaryAction>
-              <IconButton
-                onClick={attachAction({ Component: <div>Действие Раздела 2</div> })}
-                edge="end"
-                aria-label="delete"
-              >
-                <Attachment />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </List>
+        <TreeView
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpandIcon={<ChevronRightIcon />}
+        >
+          {renderLinkGroups(linkGroups)}
+        </TreeView>
       </Drawer>
     </>
   );
