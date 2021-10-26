@@ -1442,6 +1442,20 @@
     csstype "^3.0.9"
     prop-types "^15.7.2"
 
+"@mui/system@^5.0.5":
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.0.5.tgz#c0f355c79185b471f6af82dfa015fbba8081b453"
+  integrity sha512-T7kUYVivUxFfj6TQNXwjzBtGoBkwit7GCq9TvszGLO5P/fz5TETQWfUMLYku5rgg6oe44qlEQ9Jt7RYjNvjuPQ==
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    "@mui/private-theming" "^5.0.1"
+    "@mui/styled-engine" "^5.0.1"
+    "@mui/types" "^7.0.0"
+    "@mui/utils" "^5.0.1"
+    clsx "^1.1.1"
+    csstype "^3.0.9"
+    prop-types "^15.7.2"
+
 "@mui/types@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.0.0.tgz#a7398502bc9c508875aafcbe28aea599b2c3d203"

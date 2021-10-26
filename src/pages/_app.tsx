@@ -12,6 +12,8 @@ import { CssBaseline } from '@mui/material';
 import StoreProvider from 'adapters/store/StoreProvider';
 import { store } from 'adapters/store';
 
+import { Layout } from 'components/organisms/Layout';
+
 const _App = ({ Component, pageProps }: any): ReactElement => (
   <>
     <Head>
@@ -24,7 +26,9 @@ const _App = ({ Component, pageProps }: any): ReactElement => (
     <StoreProvider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
     </StoreProvider>
   </>

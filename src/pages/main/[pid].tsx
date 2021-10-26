@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from 'next/image';
 import React, { FC } from 'react';
 
@@ -19,6 +20,7 @@ const Main: FC<any> = (props) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function getStaticPaths() {
   return {
     fallback: true,
@@ -26,6 +28,7 @@ export async function getStaticPaths() {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function getStaticProps({ params }: any) {
   const { pid } = params;
 
