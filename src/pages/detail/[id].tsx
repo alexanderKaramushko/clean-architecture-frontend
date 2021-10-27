@@ -1,22 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Image from 'next/image';
 import React, { FC } from 'react';
 
-const Main: FC<any> = (props) => {
+import { Typography } from '@mui/material';
+
+const Category: FC<any> = (props) => {
   const { post } = props;
+  const { body, title } = post;
 
   return (
-    <div>
-      <h1>
-        {post?.title}
-      </h1>
-      <Image
-        src="/static/images/example.png"
-        alt="Onepiece image"
-        width={500}
-        height={500}
-      />
-    </div>
+    <>
+      <Typography variant="h1">{title}</Typography>
+      <Typography variant="body1">{body}</Typography>
+    </>
   );
 };
 
@@ -30,15 +25,15 @@ export async function getStaticPaths() {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function getStaticProps({ params }: any) {
-  const { pid } = params;
+  const { id } = params;
 
   try {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${pid}`);
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
     const post = await response.json();
 
     return {
       props: {
-        pid,
+        id,
         post,
       },
       revalidate: 1,
@@ -46,7 +41,7 @@ export async function getStaticProps({ params }: any) {
   } catch (error) {
     return {
       props: {
-        pid,
+        id,
         post: {},
       },
       revalidate: 1,
@@ -54,4 +49,4 @@ export async function getStaticProps({ params }: any) {
   }
 }
 
-export default Main;
+export default Category;

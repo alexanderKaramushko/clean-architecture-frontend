@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC } from 'react';
+import Link from 'next/link';
 
 import { SimpleCard } from 'components/organisms/CategoryCard';
 import { Grid, Typography } from '@mui/material';
@@ -9,16 +10,18 @@ const Categories: FC<any> = (props) => {
 
   return (
     <Grid container spacing={2}>
-      {categories.map(({ title, description }: any) => (
-        <Grid item sm={2}>
-          <SimpleCard key={title}>
-            <Typography variant="body1" gutterBottom>
-              {title}
-            </Typography>
-            <Typography variant="body2">
-              {description}
-            </Typography>
-          </SimpleCard>
+      {categories.map(({ title, description, id }: any) => (
+        <Grid key={id} item sm={2}>
+          <Link href={`detail/${id}`}>
+            <SimpleCard key={title}>
+              <Typography variant="body1" gutterBottom>
+                {title}
+              </Typography>
+              <Typography variant="body2">
+                {description}
+              </Typography>
+            </SimpleCard>
+          </Link>
         </Grid>
       ))}
     </Grid>
@@ -33,6 +36,7 @@ export function getStaticProps() {
         .fill(null)
         .map((_, index) => ({
           description: `Description ${index}`,
+          id: index,
           title: `Title ${index}`,
         })),
     },

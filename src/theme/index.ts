@@ -51,25 +51,25 @@ export default responsiveFontSizes(createTheme({
   },
   typography: {
     h1: {
-      fontSize: 64,
+      fontSize: 36,
       fontFamily: 'Manrope, Roboto',
       fontWeightRegular: 200,
       lineHeight: 1.4,
     },
     h2: {
-      fontSize: 36,
+      fontSize: 24,
       fontFamily: 'Manrope, Roboto',
       fontWeightRegular: 200,
       lineHeight: 1.3,
     },
     h3: {
-      fontSize: 24,
+      fontSize: 18,
       fontFamily: 'Roboto',
       fontWeightRegular: 300,
       lineHeight: 1.2,
     },
     h4: {
-      fontSize: 18,
+      fontSize: 16,
       fontFamily: 'Roboto',
       fontWeightRegular: 500,
       lineHeight: 1.1,
