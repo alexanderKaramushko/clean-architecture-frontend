@@ -6,6 +6,6 @@ export interface PanelAction {
 
 export interface PanelActionImpl {
   panelActions: PanelAction[];
-  addPanelAction: (panelAction: PanelAction) => void;
-  removePanelAction: (panelAction: PanelAction) => void;
+  addPanelAction: (panelAction: PanelAction) => PanelAction;
+  removePanelAction: (panelAction: PanelAction) => PanelAction;
 }

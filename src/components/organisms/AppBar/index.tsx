@@ -25,14 +25,16 @@ import { Drawer } from 'application/Drawers/ports';
 import { PanelAction } from 'application/PanelActions/ports';
 import { LinkGroup, Link } from 'domain/index';
 import { AppBarProps } from './types';
+import ActionsPanel from '../ActionsPanel';
 
 // todo move recursive tree view to separate component
 const AppBar: FC<AppBarProps> = (props): ReactElement => {
   const {
     addDrawer = identity,
     addPanelAction = identity,
+    children,
+    linkGroups,
     toggleDrawer = identity,
-    children, linkGroups,
   } = props;
 
   const [linksDrawer, setLinksDrawer] = useState<Drawer | undefined>();

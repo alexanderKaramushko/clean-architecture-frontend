@@ -9,6 +9,6 @@ export interface Drawer {
 export interface DrawersImpl {
   drawers: Drawer[];
   addDrawer: (drawer: Drawer) => Drawer;
-  toggleDrawer: (drawer: Drawer) => Drawer;
-  removeDrawer: (drawer: Drawer) => Drawer;
+  toggleDrawer: (drawer: Drawer | string) => Drawer | string;
+  removeDrawer: (drawer: Drawer | string) => Drawer | string;
 }

@@ -1,6 +1,9 @@
 import { action, makeObservable, observable } from 'mobx';
 import isEqual from 'lodash/fp/isEqual';
 import uniqueId from 'lodash/uniqueId';
+import uniqBy from 'lodash/uniqBy';
+import get from 'lodash/fp/get';
+import compose from 'lodash/fp/compose';
 
 import { not } from 'crocks';
 
@@ -16,54 +19,59 @@ class Drawers implements DrawersModel {
   @observable drawers: Drawer[] = [];
 
   @action.bound
-  public addDrawer(drawer: Drawer): Drawer {
+  public addDrawer(newDrawer: Drawer): Drawer {
+    const id = newDrawer.id || uniqueId();
     const drawerWithId: Drawer = {
-      id: uniqueId(),
-      ...drawer,
+      ...newDrawer,
+      id,
+      onClose: (): void => {
+        this.toggleDrawer(id);
+
+        if (newDrawer.onClose) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (newDrawer as any).onClose();
+        }
+      },
     };
 
-    this.drawers = [
-      ...this.drawers,
-      {
-        ...drawerWithId,
-        onClose: (): void => {
-          this.toggleDrawer(drawerWithId);
+    const existingDrawer = this.drawers
+      .find((drawer) => drawer.id === drawerWithId.id);
 
-          if (drawer.onClose) {
-            // todo fix any
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (drawer as any).onClose();
-          }
-        },
-      },
-    ];
+    if (existingDrawer) {
+      this.drawers = this.drawers.map((drawer) => (
+        drawer.id === id
+          ? ({ ...drawer, ...drawerWithId })
+          : drawer
+      ));
+    } else {
+      this.drawers = uniqBy([
+        ...this.drawers,
+        drawerWithId,
+      ], 'id');
+    }
 
     return drawerWithId;
   }
 
   @action.bound
-  public removeDrawer(drawer: Drawer): Drawer {
-    const isNotEqualTo = not(isEqual(drawer));
+  public removeDrawer(drawer: Drawer | string): Drawer | string {
+    const id = get('id', drawer) ?? drawer;
+    const isNotEqualToId = compose(not(isEqual(id)), get('id'));
 
-    this.drawers = this.drawers.filter(isNotEqualTo);
+    this.drawers = this.drawers.filter(isNotEqualToId);
 
     return drawer;
   }
 
   @action.bound
-  public toggleDrawer(drawerToToggle: Drawer): Drawer {
-    this.drawers = this.drawers.reduce<Drawer[]>((drawers, drawer) => {
-      if (drawer.id === drawerToToggle.id) {
-        return [
-          ...drawers,
-          {
-            ...drawer,
-            open: !drawer.open,
-          },
-        ];
-      }
-      return drawers;
-    }, []);
+  public toggleDrawer(drawerToToggle: Drawer | string): Drawer | string {
+    const id = get('id', drawerToToggle) ?? drawerToToggle;
+
+    this.drawers = this.drawers.map((drawer) => (
+      drawer.id === id
+        ? ({ ...drawer, open: !drawer.open })
+        : drawer
+    ));
 
     return drawerToToggle;
   }
