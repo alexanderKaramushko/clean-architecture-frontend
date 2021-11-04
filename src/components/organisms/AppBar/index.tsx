@@ -2,8 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC,
   ReactElement,
+  useEffect,
   useState,
-  KeyboardEvent, MouseEvent } from 'react';
+  MouseEvent } from 'react';
 import curry from 'lodash/fp/curry';
 import identity from 'lodash/fp/identity';
 import map from 'lodash/fp/map';
@@ -13,27 +14,28 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import Attachment from '@mui/icons-material/Attachment';
-import { Drawer,
-  IconButton,
+import { IconButton,
   Toolbar,
   Grid,
   Typography,
   AppBar as MaterialAppBar } from '@mui/material';
 import { TreeView, TreeItem } from '@material-ui/lab';
+import { Drawer } from 'application/Drawers/ports';
 
 import { PanelAction } from 'application/PanelActions/ports';
 import { LinkGroup, Link } from 'domain/index';
 import { AppBarProps } from './types';
 
-// todo move <Drawer /> to root
 // todo move recursive tree view to separate component
 const AppBar: FC<AppBarProps> = (props): ReactElement => {
-  const { addPanelAction = identity, children, linkGroups } = props;
-  const [open, setOpen] = useState(false);
+  const {
+    addDrawer = identity,
+    addPanelAction = identity,
+    toggleDrawer = identity,
+    children, linkGroups,
+  } = props;
 
-  const toggleDrawer = curry((isOpen: boolean, _: KeyboardEvent | MouseEvent) => {
-    setOpen(isOpen);
-  });
+  const [linksDrawer, setLinksDrawer] = useState<Drawer | undefined>();
 
   const attachAction = curry(
     (panelAction: PanelAction, event: MouseEvent<HTMLButtonElement>) => addPanelAction(panelAction),
@@ -87,6 +89,27 @@ const AppBar: FC<AppBarProps> = (props): ReactElement => {
 
   const renderLinkGroups = map(renderLinkGroup);
 
+  useEffect(() => {
+    const drawer = addDrawer({
+      Component: (
+        <TreeView
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpandIcon={<ChevronRightIcon />}
+        >
+          {renderLinkGroups(linkGroups)}
+        </TreeView>
+      ),
+      SlideProps: {
+        style: {
+          padding: '42px 24px',
+        },
+      },
+      anchor: 'left',
+    });
+
+    setLinksDrawer(drawer);
+  }, []);
+
   return (
     <>
       <MaterialAppBar
@@ -97,29 +120,18 @@ const AppBar: FC<AppBarProps> = (props): ReactElement => {
         }}
       >
         <Toolbar>
-          <IconButton onClick={toggleDrawer(!open)}>
+          <IconButton
+            onClick={(): void => {
+              if (linksDrawer) {
+                toggleDrawer(linksDrawer);
+              }
+            }}
+          >
             <MenuIcon />
           </IconButton>
           {children}
         </Toolbar>
       </MaterialAppBar>
-      <Drawer
-        anchor="left"
-        onClose={toggleDrawer(false)}
-        SlideProps={{
-          style: {
-            padding: '42px 24px',
-          },
-        }}
-        open={open}
-      >
-        <TreeView
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-        >
-          {renderLinkGroups(linkGroups)}
-        </TreeView>
-      </Drawer>
     </>
   );
 };

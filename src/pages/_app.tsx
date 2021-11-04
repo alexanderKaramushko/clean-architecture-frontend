@@ -14,6 +14,7 @@ import StoreProvider from 'adapters/store/StoreProvider';
 import { store } from 'adapters/store';
 
 import { Layout } from 'components/organisms/Layout';
+import Drawers from 'components/containers/Drawers';
 
 const _App = ({ Component, pageProps }: any): ReactElement => {
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ const _App = ({ Component, pageProps }: any): ReactElement => {
         <ThemeProvider theme={theme}>
           {loading && <LinearProgress color="secondary" />}
           <CssBaseline />
+          <Drawers />
           <Layout>
             <Component {...pageProps} />
           </Layout>
