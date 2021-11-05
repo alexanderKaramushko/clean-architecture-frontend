@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
-import isEqual from 'lodash/fp/isEqual';
-import { not } from 'crocks';
+
+import { notEqual } from 'utils/fp';
 
 import { PanelAction } from 'application/PanelActions/ports';
 import { PanelActionsModel } from './types';
@@ -22,9 +22,7 @@ class PanelActions implements PanelActionsModel {
 
   @action.bound
   public removePanelAction(panelAction: PanelAction): PanelAction {
-    const isNotEqualTo = not(isEqual(panelAction));
-
-    this.panelActions = this.panelActions.filter(isNotEqualTo);
+    this.panelActions = this.panelActions.filter(notEqual(panelAction));
 
     return panelAction;
   }
