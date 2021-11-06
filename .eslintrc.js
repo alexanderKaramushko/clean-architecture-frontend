@@ -38,6 +38,7 @@ const config = {
     'import/no-unresolved': [2, {
       ignore: [
         'adapters',
+        'api',
         'application',
         'assets',
         'components',
