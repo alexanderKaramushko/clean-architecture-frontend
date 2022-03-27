@@ -10,6 +10,7 @@ const IndexPage = (): ReactElement => (
         content="Onepiece SSR"
       />
     </Head>
+    <div>Version: %%VERSION%%</div>
   </>
 );
 

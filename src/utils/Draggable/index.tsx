@@ -1,5 +1,4 @@
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import React, { FC, MouseEvent, PropsWithChildren, ReactElement, useRef, useState } from 'react';
+import React, { FC, HTMLAttributes, MouseEvent, PropsWithChildren, ReactElement, useRef, useState } from 'react';
 import { useDraggable } from './hooks';
 
 const Draggable: FC<PropsWithChildren<{}>> = ({ children }): ReactElement => {
@@ -30,7 +29,7 @@ const Draggable: FC<PropsWithChildren<{}>> = ({ children }): ReactElement => {
     }
   }
 
-  const style: CSSProperties = {
+  const style: HTMLAttributes<HTMLElement>['style'] = {
     left: `${left}px`,
     position: 'absolute',
     top: `${top}px`,

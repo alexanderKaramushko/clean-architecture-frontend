@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react';
-import Catch from '@utils/Catch/Catch';
+import Catch from '../Catch/Catch';
 import { Props } from './ErrorBoundary.types';
 
 import styles from './style.module.scss';

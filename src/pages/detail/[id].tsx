@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { Typography } from '@mui/material';
 
 const Category: FC<any> = (props) => {
-  const { post } = props;
+  const { post = {} } = props;
   const { body, title } = post;
 
   return (

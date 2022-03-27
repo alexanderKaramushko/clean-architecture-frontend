@@ -8,8 +8,9 @@ class CrudService<T> extends BaseService<T> {
       const response = await this.get(config);
 
       return response.data;
-    } catch (error: any) {
-      throw new Error(`Failed to get ${this.path}: ${error.message}`);
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      throw new Error(`Failed to get ${this.path}: ${(error as any).message}`);
     }
   }
 
