@@ -1,0 +1,15 @@
+stages:
+  - build
+
+build website:
+  stage: build
+  only:
+    - main
+    - merge_requests
+  script:
+    - echo $CI_COMMIT_SHORT_SHA
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - ./public
